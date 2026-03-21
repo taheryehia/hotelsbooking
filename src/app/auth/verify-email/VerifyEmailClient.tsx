@@ -214,6 +214,8 @@ function Layout({ children }: { children: React.ReactNode }) {
                     fill
                     className="object-cover"
                     priority
+                    quality={60}
+                    sizes="100vw"
                 />
                 <div className="absolute inset-0 bg-black/35" />
             </div>

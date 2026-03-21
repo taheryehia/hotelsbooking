@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { BookOpen, LogOut, LayoutDashboard, Heart, MessageSquare } from "lucide-react"
 import { SignOutButton } from "@/components/auth/sign-out-button"
 import { AccountSettingsForm } from "@/components/forms/account-settings-form"
@@ -31,15 +32,17 @@ export default async function AccountPage() {
 
     return (
         <div className="flex min-h-screen flex-col relative bg-neutral-950">
-            <div
-                className="fixed top-0 left-0 w-full h-[100lvh] z-0 bg-cover bg-center bg-no-repeat pointer-events-none will-change-transform"
-                style={{
-                    backgroundImage: `url('https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`,
-                    transform: 'translateZ(0)',
-                    backfaceVisibility: 'hidden'
-                }}
-            >
-                <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+            <div className="fixed inset-0 z-0 pointer-events-none">
+                <Image
+                    src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    alt="Account Background"
+                    fill
+                    className="object-cover"
+                    priority
+                    quality={60}
+                    sizes="100vw"
+                />
+                <div className="absolute inset-0 bg-black/60" />
             </div>
 
             <div className="relative z-10 flex flex-col min-h-screen">

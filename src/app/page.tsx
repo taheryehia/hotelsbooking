@@ -104,7 +104,8 @@ export default async function Home({ searchParams }: PageProps) {
               fill
               className="object-cover"
               priority
-              unoptimized
+              quality={75}
+              sizes="100vw"
             />
             {/* Dark overlay for text readability */}
             <div className="absolute inset-0 bg-black/30" />
