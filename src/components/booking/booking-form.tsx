@@ -6,9 +6,10 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { CreditCard } from "lucide-react"
 import { lockRoom, releaseRoomLock } from "@/actions/availability"
-import { createPaymentIntent, createCheckoutSession } from "@/actions/payments"
 import { createBooking } from "@/actions/bookings"
 import { formatCurrency } from "@/lib/utils"
+// import { StripeElementsProvider, CheckoutForm } from "./checkout-elements" (already written, I will import them here)
+import { StripeElementsProvider, CheckoutForm } from "./checkout-elements"
 
 export function BookingForm({
     hotel,
@@ -25,6 +26,7 @@ export function BookingForm({
     const [loading, setLoading] = useState(false)
     const [locked, setLocked] = useState(false)
     const [clientSecret, setClientSecret] = useState("")
+    const [bookingId, setBookingId] = useState("")
 
     const checkIn = searchParams.checkIn || new Date().toISOString().split('T')[0]
     const checkOut = searchParams.checkOut || new Date(Date.now() + 86400000).toISOString().split('T')[0]
@@ -75,22 +77,9 @@ export function BookingForm({
                 paymentIntentId: "pending"
             })
 
-            if (result && result.success && result.bookingId) {
-                const baseUrl = window.location.origin
-                const checkoutSession = await createCheckoutSession({
-                    hotelName: hotel.name,
-                    roomName: roomType.name,
-                    amount: totalAmount,
-                    bookingId: result.bookingId,
-                    successUrl: `${baseUrl}/booking/confirmation?id=${result.bookingId}`,
-                    cancelUrl: `${baseUrl}/booking/${hotel.id}?roomType=${roomType.id}`
-                })
-
-                if (checkoutSession.url) {
-                    window.location.href = checkoutSession.url
-                } else {
-                    throw new Error("Failed to create checkout session")
-                }
+            if (result && result.success && result.bookingId && result.clientSecret) {
+                setClientSecret(result.clientSecret)
+                setBookingId(result.bookingId)
             } else {
                 throw new Error("Booking creation failed")
             }
@@ -123,37 +112,54 @@ export function BookingForm({
                         </div>
                     </div>
 
-                    <div className="pt-8 border-t border-white/5">
-                        <div className="flex flex-col gap-6">
+                    {clientSecret ? (
+                        <div className="pt-8 border-t border-white/5 space-y-6">
                             <div className="space-y-2">
-                                <h2 className="text-2xl font-black tracking-tight">Payment Method</h2>
-                                <p className="text-[10px] text-white/40 font-black uppercase tracking-widest">Secure Checkout</p>
+                                <h2 className="text-2xl font-black tracking-tight">Payment Details</h2>
+                                <p className="text-[10px] text-white/40 font-black uppercase tracking-widest">Complete your booking securely</p>
                             </div>
-
-                            <div className="p-6 border border-white/10 rounded-3xl bg-white/[0.03] space-y-3 relative overflow-hidden group">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-3xl -mr-16 -mt-16 group-hover:bg-white/10 transition-all duration-500" />
-                                <div className="flex items-center gap-4 relative z-10">
-                                    <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
-                                        <CreditCard className="h-6 w-6 text-white" />
+                            <StripeElementsProvider clientSecret={clientSecret}>
+                                <CheckoutForm
+                                    onSuccess={() => router.push(`/booking/confirmation?id=${bookingId}`)}
+                                    onCancel={() => setClientSecret("")}
+                                />
+                            </StripeElementsProvider>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="pt-8 border-t border-white/5">
+                                <div className="flex flex-col gap-6">
+                                    <div className="space-y-2">
+                                        <h2 className="text-2xl font-black tracking-tight">Payment Method</h2>
+                                        <p className="text-[10px] text-white/40 font-black uppercase tracking-widest">Secure Checkout</p>
                                     </div>
-                                    <div>
-                                        <p className="font-bold text-white">Credit Card via Stripe</p>
-                                        <p className="text-xs text-white/40">Secured 256-bit SSL encrypted payment</p>
+
+                                    <div className="p-6 border border-white/10 rounded-3xl bg-white/[0.03] space-y-3 relative overflow-hidden group">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-3xl -mr-16 -mt-16 group-hover:bg-white/10 transition-all duration-500" />
+                                        <div className="flex items-center gap-4 relative z-10">
+                                            <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
+                                                <CreditCard className="h-6 w-6 text-white" />
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-white">Credit Card via Stripe</p>
+                                                <p className="text-xs text-white/40">Secured 256-bit SSL encrypted payment</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div className="pt-4">
-                        <Button
-                            className="w-full h-16 bg-white text-black hover:bg-white/90 font-black text-lg rounded-2xl shadow-2xl shadow-white/5 transition-all active:scale-[0.98]"
-                            onClick={handleBooking}
-                            disabled={loading || !locked}
-                        >
-                            {loading ? "Processing..." : "Complete Booking"}
-                        </Button>
-                    </div>
+                            <div className="pt-4">
+                                <Button
+                                    className="w-full h-16 bg-white text-black hover:bg-white/90 font-black text-lg rounded-2xl shadow-2xl shadow-white/5 transition-all active:scale-[0.98]"
+                                    onClick={handleBooking}
+                                    disabled={loading || !locked}
+                                >
+                                    {loading ? "Processing..." : "Complete Booking"}
+                                </Button>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
 

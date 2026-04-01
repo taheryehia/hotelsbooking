@@ -21,24 +21,17 @@ export async function POST(req: Request) {
 
     if (event.type === "payment_intent.amount_capturable_updated") {
         const intent = event.data.object as any
-        await prisma.payment.update({
-            where: { stripe_payment_intent_id: intent.id },
-            data: { status: "authorized" }
-        })
-    }
+        const bookingId = intent.metadata?.bookingId
 
-
-    if (event.type === "checkout.session.completed") {
-        const session = event.data.object as any
-        const bookingId = session.metadata.bookingId
+        if (!bookingId) {
+            console.error("No bookingId in metadata")
+            return new Response(null, { status: 200 })
+        }
 
         const result = await prisma.$transaction(async (tx) => {
             const payment = await tx.payment.update({
                 where: { booking_id: bookingId },
-                data: {
-                    stripe_payment_intent_id: session.payment_intent,
-                    status: "authorized"
-                }
+                data: { status: "authorized" }
             })
 
             const booking = await tx.booking.update({

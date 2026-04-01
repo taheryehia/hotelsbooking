@@ -132,7 +132,15 @@ export async function createBooking(data: z.infer<typeof bookingSchema>) {
         return booking
     })
 
-    return { success: true, bookingId: result.id }
+    const { createPaymentIntent } = await import("./payments")
+    const paymentIntent = await createPaymentIntent(validated.totalAmount, "usd", { bookingId: result.id })
+
+    await prisma.payment.update({
+        where: { booking_id: result.id },
+        data: { stripe_payment_intent_id: paymentIntent.id }
+    })
+
+    return { success: true, bookingId: result.id, clientSecret: paymentIntent.clientSecret }
 }
 
 export async function cancelBooking(bookingId: string, reason: string) {

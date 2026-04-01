@@ -7,7 +7,7 @@ export async function createPaymentIntent(amount: number, currency: string = "us
     const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(amount * 100),
         currency,
-        capture_method: "automatic", // changed to automatic for simpler flow unless manual capture is strictly required
+        capture_method: "manual",
         metadata: metadata,
         automatic_payment_methods: {
             enabled: true,
@@ -17,42 +17,6 @@ export async function createPaymentIntent(amount: number, currency: string = "us
     return { clientSecret: paymentIntent.client_secret, id: paymentIntent.id }
 }
 
-export async function createCheckoutSession(params: {
-    hotelName: string
-    roomName: string
-    amount: number
-    bookingId: string
-    successUrl: string
-    cancelUrl: string
-}) {
-    const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: `${params.roomName} at ${params.hotelName}`,
-                        description: 'Hotel Room Booking',
-                    },
-                    unit_amount: Math.round(params.amount * 100),
-                },
-                quantity: 1,
-            },
-        ],
-        mode: 'payment',
-        success_url: params.successUrl,
-        cancel_url: params.cancelUrl,
-        payment_intent_data: {
-            capture_method: 'manual',
-        },
-        metadata: {
-            bookingId: params.bookingId,
-        },
-    })
-
-    return { url: session.url, sessionId: session.id }
-}
 
 export async function capturePayment(paymentIntentId: string, amount?: number) {
     const intent = await stripe.paymentIntents.capture(paymentIntentId, {
