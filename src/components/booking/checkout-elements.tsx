@@ -5,7 +5,15 @@ import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-
 import { loadStripe } from "@stripe/stripe-js"
 import { Button } from "@/components/ui/button"
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "pk_test_mock")
+const stripePromise = loadStripe(
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "pk_test_mock",
+    {
+        // @ts-ignore
+        developerTools: {
+            assistant: { enabled: false }
+        }
+    }
+)
 
 export function CheckoutForm({ bookingId }: { bookingId: string }) {
     const stripe = useStripe()
@@ -75,12 +83,8 @@ export function StripeElementsProvider({ clientSecret, children }: { clientSecre
                         cssSrc: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap'
                     }
                 ],
-                // @ts-ignore - Some Stripe JS versions may not have the types for this new property yet
-                developerTools: {
-                    assistant: { enabled: false }
-                },
                 appearance: {
-                    theme: 'night',
+                    theme: 'flat',
                     variables: {
                         colorPrimary: '#ffffff',
                         colorBackground: '#0a0a0a',
