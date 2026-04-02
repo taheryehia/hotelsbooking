@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js"
+import { Elements, PaymentElement, ExpressCheckoutElement, useStripe, useElements } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
 import { Button } from "@/components/ui/button"
 
@@ -43,9 +43,42 @@ export function CheckoutForm({ bookingId }: { bookingId: string }) {
         }
     }
 
+    const handleExpressConfirm = async () => {
+        if (!stripe || !elements) return
+
+        setLoading(true)
+        const { error } = await stripe.confirmPayment({
+            elements,
+            redirect: "if_required",
+            confirmParams: {
+                return_url: window.location.origin + `/booking/confirmation?id=${bookingId}`,
+            }
+        })
+
+        if (error) {
+            setMessage(error.message || "An unexpected error occurred.")
+            setLoading(false)
+        } else {
+            window.location.href = `/booking/confirmation?id=${bookingId}`
+        }
+    }
+
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-6">
+                <ExpressCheckoutElement onConfirm={handleExpressConfirm} />
+
+                <div className="relative my-8">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-white/10" />
+                    </div>
+                    <div className="relative flex justify-center text-[10px]">
+                        <span className="bg-[#121212] px-4 text-white/40 uppercase tracking-widest font-black rounded-full border border-white/5">
+                            Or pay securely with card
+                        </span>
+                    </div>
+                </div>
+
                 <PaymentElement options={{ layout: "tabs" }} />
             </div>
             {message && <div className="text-red-500 text-sm bg-red-500/10 p-4 rounded-xl">{message}</div>}
