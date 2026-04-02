@@ -87,14 +87,16 @@ export function CheckoutForm({ bookingId }: { bookingId: string }) {
                 <button
                     type="submit"
                     disabled={!stripe || loading}
-                    className="w-full sm:w-auto flex-1 h-16 md:h-16 bg-white text-black text-base md:text-lg font-black rounded-2xl hover:bg-white/90 shadow-xl shadow-white/5 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                    style={{ minHeight: '64px' }}
+                    className="w-full sm:w-auto flex-1 py-4 bg-white text-black text-base md:text-lg font-black rounded-2xl hover:bg-white/90 shadow-xl shadow-white/5 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
                 >
                     {loading ? "Processing..." : "Complete Order"}
                 </button>
                 <button
                     type="button"
                     onClick={() => window.history.back()}
-                    className="w-full sm:w-auto flex-1 h-16 md:h-16 bg-transparent border-[1.5px] border-white/10 text-white text-base md:text-lg font-bold rounded-2xl hover:bg-white/5 shadow-xl shadow-transparent transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                    style={{ minHeight: '64px' }}
+                    className="w-full sm:w-auto flex-1 py-4 bg-transparent border-[1.5px] border-white/10 text-white text-base md:text-lg font-bold rounded-2xl hover:bg-white/5 shadow-xl shadow-transparent transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
                     disabled={loading}
                 >
                     Cancel Payment
