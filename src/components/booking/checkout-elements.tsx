@@ -74,7 +74,7 @@ export function StripeElementsProvider({ clientSecret, children }: { clientSecre
                     theme: 'night',
                     variables: {
                         colorPrimary: '#ffffff',
-                        colorBackground: 'transparent',
+                        colorBackground: '#0a0a0a',
                         colorText: '#ffffff',
                         colorDanger: '#ef4444',
                         fontFamily: 'inherit',
