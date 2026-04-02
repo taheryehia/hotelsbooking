@@ -9,6 +9,7 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { ClientContentWrapper, AnimatedSection, AnimatedScaleButton } from "@/components/layout/client-animation-wrapper"
 import { formatCurrency } from "@/lib/utils"
+import { ReserveButton } from "@/components/booking/reserve-button"
 
 export const dynamic = 'force-dynamic'
 
@@ -245,11 +246,15 @@ export default async function RoomPage({
                                                     </p>
                                                 </div>
                                             ) : (
-                                                <Link href={`/booking/${room.hotel_id}?roomType=${room.id}${checkIn && checkOut ? `&checkIn=${checkIn}&checkOut=${checkOut}` : ""}`} className="w-full">
-                                                    <AnimatedScaleButton className="w-full h-14 md:h-16 bg-white text-black text-base md:text-lg font-black rounded-2xl hover:bg-white/90 shadow-xl shadow-white/5 transition-all">
-                                                        Reserve Now
-                                                    </AnimatedScaleButton>
-                                                </Link>
+                                                <div className="w-full">
+                                                    <ReserveButton
+                                                        hotelId={room.hotel_id}
+                                                        roomId={room.id}
+                                                        basePrice={room.base_price}
+                                                        checkIn={checkIn}
+                                                        checkOut={checkOut}
+                                                    />
+                                                </div>
                                             )}
                                         </div>
 
