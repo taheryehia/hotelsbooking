@@ -70,6 +70,15 @@ export function StripeElementsProvider({ clientSecret, children }: { clientSecre
             stripe={stripePromise}
             options={{
                 clientSecret,
+                fonts: [
+                    {
+                        cssSrc: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap'
+                    }
+                ],
+                // @ts-ignore - Some Stripe JS versions may not have the types for this new property yet
+                developerTools: {
+                    assistant: { enabled: false }
+                },
                 appearance: {
                     theme: 'night',
                     variables: {
@@ -77,7 +86,7 @@ export function StripeElementsProvider({ clientSecret, children }: { clientSecre
                         colorBackground: '#0a0a0a',
                         colorText: '#ffffff',
                         colorDanger: '#ef4444',
-                        fontFamily: 'inherit',
+                        fontFamily: "'Outfit', 'Inter', system-ui, sans-serif",
                         borderRadius: '16px',
                     }
                 }
