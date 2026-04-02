@@ -72,8 +72,8 @@ export function CheckoutForm({ bookingId }: { bookingId: string }) {
                     <div className="absolute inset-0 flex items-center">
                         <div className="w-full border-t border-white/10" />
                     </div>
-                    <div className="relative flex justify-center text-[10px]">
-                        <span className="bg-[#121212] px-4 text-white/40 uppercase tracking-widest font-black rounded-full border border-white/5">
+                    <div className="relative flex justify-center text-[10px] w-full px-4">
+                        <span className="bg-[#121212] px-3 py-1 text-white/40 uppercase tracking-widest font-black rounded-full border border-white/5 text-center whitespace-normal leading-tight mx-auto relative z-10 max-w-[80%]">
                             Or pay securely with card
                         </span>
                     </div>
@@ -83,7 +83,7 @@ export function CheckoutForm({ bookingId }: { bookingId: string }) {
             </div>
             {message && <div className="text-red-500 text-sm bg-red-500/10 p-4 rounded-xl">{message}</div>}
 
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
                 <Button
                     type="button"
                     variant="outline"

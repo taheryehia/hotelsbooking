@@ -75,7 +75,7 @@ export default async function CheckoutPage({
                                 <Sparkles className="w-3.5 h-3.5" />
                                 Secured Reservation
                             </div>
-                            <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-none">Confirm Your Stay</h1>
+                            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter leading-none break-words">Confirm Your Stay</h1>
                             <p className="text-white/40 font-medium text-lg">Finishing the details for your experience at <span className="text-white">{booking.hotel.name}</span></p>
                         </div>
                     </AnimatedSection>
@@ -84,7 +84,7 @@ export default async function CheckoutPage({
                     <AnimatedSection delay={0.1}>
                         <div className="relative overflow-hidden group max-w-4xl mx-auto">
                             <div className="absolute inset-0 bg-gradient-to-r from-accent/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                            <div className="relative p-8 rounded-[32px] bg-white/[0.02] border border-white/10 flex flex-col md:flex-row items-center gap-6 shadow-2xl">
+                            <div className="relative p-6 md:p-8 rounded-[32px] bg-white/[0.02] border border-white/10 flex flex-col md:flex-row items-center gap-6 shadow-2xl">
                                 <div className="w-16 h-16 rounded-2xl bg-accent/20 border border-accent/20 flex items-center justify-center text-accent animate-pulse">
                                     <Clock className="w-8 h-8" />
                                 </div>
@@ -104,7 +104,7 @@ export default async function CheckoutPage({
                         <div className="grid lg:grid-cols-3 gap-8 items-start">
                             {/* Payment Column */}
                             <div className="lg:col-span-2 space-y-8">
-                                <div className="bg-white/[0.02] rounded-[32px] border border-white/5 p-8 md:p-10 shadow-2xl backdrop-blur-xl">
+                                <div className="bg-white/[0.02] rounded-[32px] border border-white/5 p-5 sm:p-8 md:p-10 shadow-2xl backdrop-blur-xl">
                                     <div className="space-y-6">
                                         <div className="space-y-2">
                                             <h2 className="text-2xl font-black tracking-tight">Payment Details</h2>
@@ -121,7 +121,7 @@ export default async function CheckoutPage({
 
                             {/* Summary Column */}
                             <div className="space-y-10">
-                                <div className="rounded-[32px] border border-white/5 p-8 md:p-10 bg-white/[0.02] shadow-2xl backdrop-blur-xl space-y-8">
+                                <div className="rounded-[32px] border border-white/5 p-6 sm:p-8 md:p-10 bg-white/[0.02] shadow-2xl backdrop-blur-xl space-y-8">
                                     <div className="space-y-2">
                                         <h2 className="text-2xl font-black tracking-tight">Your Stay</h2>
                                         <p className="text-[10px] text-white/40 font-black uppercase tracking-widest">Reservation Summary</p>
