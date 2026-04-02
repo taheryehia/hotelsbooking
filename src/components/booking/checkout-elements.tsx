@@ -84,22 +84,21 @@ export function CheckoutForm({ bookingId }: { bookingId: string }) {
             {message && <div className="text-red-500 text-sm bg-red-500/10 p-4 rounded-xl">{message}</div>}
 
             <div className="flex flex-col sm:flex-row gap-4 w-full pt-4">
-                <Button
+                <button
                     type="submit"
                     disabled={!stripe || loading}
-                    className="w-full sm:w-auto flex-1 h-14 md:h-16 bg-white text-black text-base md:text-lg font-black rounded-2xl hover:bg-white/90 shadow-xl shadow-white/5 transition-all active:scale-[0.98]"
+                    className="w-full sm:w-auto flex-1 h-16 md:h-16 bg-white text-black text-base md:text-lg font-black rounded-2xl hover:bg-white/90 shadow-xl shadow-white/5 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
                 >
                     {loading ? "Processing..." : "Complete Order"}
-                </Button>
-                <Button
+                </button>
+                <button
                     type="button"
-                    variant="outline"
                     onClick={() => window.history.back()}
-                    className="w-full sm:w-auto flex-1 h-14 md:h-16 bg-transparent border-[1.5px] border-white/10 text-white text-base md:text-lg font-bold rounded-2xl hover:bg-white/5 shadow-xl shadow-transparent transition-all active:scale-[0.98]"
+                    className="w-full sm:w-auto flex-1 h-16 md:h-16 bg-transparent border-[1.5px] border-white/10 text-white text-base md:text-lg font-bold rounded-2xl hover:bg-white/5 shadow-xl shadow-transparent transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
                     disabled={loading}
                 >
                     Cancel Payment
-                </Button>
+                </button>
             </div>
         </form>
     )
