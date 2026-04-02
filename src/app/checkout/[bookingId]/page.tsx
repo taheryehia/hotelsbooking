@@ -112,8 +112,7 @@ export default async function CheckoutPage({
                                         </div>
                                         <StripeElementsProvider clientSecret={clientSecret}>
                                             <CheckoutForm
-                                                onSuccess={() => { window.location.href = `/booking/confirmation?id=${booking.id}` }}
-                                                onCancel={() => { window.history.back() }}
+                                                bookingId={booking.id}
                                             />
                                         </StripeElementsProvider>
                                     </div>

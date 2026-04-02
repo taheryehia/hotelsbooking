@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "pk_test_mock")
 
-export function CheckoutForm({ onSuccess, onCancel }: { onSuccess: () => void, onCancel: () => void }) {
+export function CheckoutForm({ bookingId }: { bookingId: string }) {
     const stripe = useStripe()
     const elements = useElements()
     const [loading, setLoading] = useState(false)
@@ -31,7 +31,7 @@ export function CheckoutForm({ onSuccess, onCancel }: { onSuccess: () => void, o
             setMessage(error.message || "An unexpected error occurred.")
             setLoading(false)
         } else {
-            onSuccess()
+            window.location.href = `/booking/confirmation?id=${bookingId}`
         }
     }
 
@@ -46,7 +46,7 @@ export function CheckoutForm({ onSuccess, onCancel }: { onSuccess: () => void, o
                 <Button
                     type="button"
                     variant="outline"
-                    onClick={onCancel}
+                    onClick={() => window.history.back()}
                     className="flex-1 rounded-2xl h-16 border-white/10 text-white hover:bg-white/5"
                     disabled={loading}
                 >
