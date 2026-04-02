@@ -83,22 +83,22 @@ export function CheckoutForm({ bookingId }: { bookingId: string }) {
             </div>
             {message && <div className="text-red-500 text-sm bg-red-500/10 p-4 rounded-xl">{message}</div>}
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 w-full pt-4">
+                <Button
+                    type="submit"
+                    disabled={!stripe || loading}
+                    className="w-full sm:w-auto flex-1 bg-white text-black hover:bg-white/90 font-black h-16 rounded-2xl text-base md:text-lg"
+                >
+                    {loading ? "Processing..." : "Complete Order"}
+                </Button>
                 <Button
                     type="button"
                     variant="outline"
                     onClick={() => window.history.back()}
-                    className="flex-1 rounded-2xl h-16 border-white/10 text-white hover:bg-white/5"
+                    className="w-full sm:w-auto flex-1 rounded-2xl h-16 border-[1.5px] border-white/10 text-white hover:bg-white/5 text-base md:text-lg font-bold"
                     disabled={loading}
                 >
                     Cancel Payment
-                </Button>
-                <Button
-                    type="submit"
-                    disabled={!stripe || loading}
-                    className="flex-1 bg-white text-black hover:bg-white/90 font-bold h-16 rounded-2xl"
-                >
-                    {loading ? "Processing..." : "Complete Order"}
                 </Button>
             </div>
         </form>
