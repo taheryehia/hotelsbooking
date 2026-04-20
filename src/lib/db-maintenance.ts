@@ -46,3 +46,12 @@ export async function cleanupExpiredTokens() {
         throw error
     }
 }
+export async function performPing() {
+    try {
+        await prisma.user.count()
+        console.log("Database ping successful.")
+    } catch (error) {
+        console.error("Database ping failed:", error)
+        throw error
+    }
+}
