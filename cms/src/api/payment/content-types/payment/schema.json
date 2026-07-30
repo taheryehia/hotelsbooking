@@ -1,6 +1,6 @@
 {
   "kind": "collectionType",
-  "collectionName": "payments",
+  "collectionName": "cms_payments",
   "info": {
     "singularName": "payment",
     "pluralName": "payments",

@@ -1,6 +1,6 @@
 {
   "kind": "singleType",
-  "collectionName": "hero_banners",
+  "collectionName": "cms_hero_banners",
   "info": {
     "singularName": "hero-banner",
     "pluralName": "hero-banners",

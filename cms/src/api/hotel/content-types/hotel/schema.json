@@ -1,6 +1,6 @@
 {
   "kind": "collectionType",
-  "collectionName": "hotels",
+  "collectionName": "cms_hotels",
   "info": {
     "singularName": "hotel",
     "pluralName": "hotels",

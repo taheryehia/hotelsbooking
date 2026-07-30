@@ -1,6 +1,6 @@
 {
   "kind": "collectionType",
-  "collectionName": "bookings",
+  "collectionName": "cms_bookings",
   "info": {
     "singularName": "booking",
     "pluralName": "bookings",
