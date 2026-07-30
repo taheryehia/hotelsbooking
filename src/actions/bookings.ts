@@ -135,10 +135,21 @@ export async function createBooking(data: z.infer<typeof bookingSchema>) {
     const { createPaymentIntent } = await import("./payments")
     const paymentIntent = await createPaymentIntent(validated.totalAmount, "usd", { bookingId: result.id })
 
-    await prisma.payment.update({
+    const updatedPayment = await prisma.payment.update({
         where: { booking_id: result.id },
         data: { stripe_payment_intent_id: paymentIntent.id }
     })
+
+    const fullBooking = await prisma.booking.findUnique({
+        where: { id: result.id },
+        include: { hotel: true, payment: true }
+    })
+
+    if (fullBooking) {
+        const { syncBookingToStrapi, syncPaymentToStrapi } = await import("@/lib/strapi")
+        await syncBookingToStrapi(fullBooking)
+        await syncPaymentToStrapi(updatedPayment)
+    }
 
     return { success: true, bookingId: result.id, clientSecret: paymentIntent.clientSecret }
 }

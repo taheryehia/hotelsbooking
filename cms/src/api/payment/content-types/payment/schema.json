@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "payments",
+  "info": {
+    "singularName": "payment",
+    "pluralName": "payments",
+    "displayName": "Payment",
+    "description": "Stripe payment transactions"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "stripe_payment_intent_id": {
+      "type": "string",
+      "required": true
+    },
+    "booking_reference": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "decimal"
+    },
+    "status": {
+      "type": "string",
+      "default": "pending"
+    },
+    "captured_at": {
+      "type": "datetime"
+    }
+  }
+}

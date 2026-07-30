@@ -2,9 +2,9 @@ import { Header } from "@/components/layout/header"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
-import { Building2, FileText, BarChart3, ChevronRight, Settings, Shield, Sparkles, Users } from "lucide-react"
+import { Building2, FileText, ChevronRight, Shield, Settings, Database } from "lucide-react"
 import Link from "next/link"
-import { AnimatedSection, ClientContentWrapper, AnimatedScaleButton } from "@/components/layout/client-animation-wrapper"
+import { AnimatedSection, ClientContentWrapper } from "@/components/layout/client-animation-wrapper"
 
 export const dynamic = 'force-dynamic'
 
@@ -31,7 +31,7 @@ export default async function AdminDashboardPage() {
                                 Platform Authority
                             </div>
                             <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-none">Administration</h1>
-                            <p className="text-white/40 font-medium text-lg">Platform governance and oversight</p>
+                            <p className="text-white/40 font-medium text-lg">Platform governance and Strapi CMS control panel</p>
                         </div>
                     </AnimatedSection>
 
@@ -39,7 +39,7 @@ export default async function AdminDashboardPage() {
                         <div className="grid gap-6 md:grid-cols-3">
                             {[
                                 { label: 'Total Hotels', value: hotelCount, icon: Building2, color: 'text-white' },
-                                { label: 'Total Users', value: userCount, icon: Users, color: 'text-white' },
+                                { label: 'Total Users', value: userCount, icon: Shield, color: 'text-white' },
                                 { label: 'Pending Apps', value: pendingApps, icon: FileText, color: 'text-accent' }
                             ].map((stat, i) => (
                                 <div key={i} className="card-section p-8 bg-white/[0.02] flex flex-col items-center text-center gap-4 group hover:bg-white/[0.04] transition-colors">
@@ -56,21 +56,39 @@ export default async function AdminDashboardPage() {
                     </AnimatedSection>
 
                     <AnimatedSection delay={0.2}>
-                        <Link href="/admin/applications" className="block max-w-md mx-auto group">
-                            <div className="card-section p-8 bg-white/[0.02] flex flex-col items-center text-center gap-6 border-white/10 group-hover:border-white/20 transition-all duration-500 relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <div className="w-20 h-20 rounded-[24px] bg-white/5 border border-white/10 flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform duration-500">
-                                    <FileText className="w-8 h-8 text-white group-hover:text-accent transition-colors" />
+                        <div className="grid gap-6 md:grid-cols-2">
+                            <Link href="/admin/applications" className="block group">
+                                <div className="card-section p-8 bg-white/[0.02] flex flex-col items-center text-center gap-6 border-white/10 group-hover:border-white/20 transition-all duration-500 relative overflow-hidden h-full">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <div className="w-16 h-16 rounded-[20px] bg-white/5 border border-white/10 flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform duration-500">
+                                        <FileText className="w-7 h-7 text-white group-hover:text-accent transition-colors" />
+                                    </div>
+                                    <div className="relative z-10 space-y-2">
+                                        <h3 className="text-xl font-black tracking-tight">Review Applications</h3>
+                                        <p className="text-white/40 text-sm font-medium leading-relaxed">Validate and onboard the next wave of luxury hospitality partners.</p>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white relative z-10 group-hover:gap-4 transition-all mt-auto">
+                                        Access Module <ChevronRight className="w-4 h-4" />
+                                    </div>
                                 </div>
-                                <div className="relative z-10 space-y-2">
-                                    <h3 className="text-2xl font-black tracking-tight">Review Applications</h3>
-                                    <p className="text-white/40 text-sm font-medium leading-relaxed">Validate and onboard the next wave of luxury hospitality partners.</p>
+                            </Link>
+
+                            <a href="http://localhost:1337/admin" target="_blank" rel="noreferrer" className="block group">
+                                <div className="card-section p-8 bg-white/[0.02] flex flex-col items-center text-center gap-6 border-white/10 group-hover:border-white/20 transition-all duration-500 relative overflow-hidden h-full">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <div className="w-16 h-16 rounded-[20px] bg-white/5 border border-white/10 flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform duration-500">
+                                        <Database className="w-7 h-7 text-accent group-hover:scale-110 transition-transform" />
+                                    </div>
+                                    <div className="relative z-10 space-y-2">
+                                        <h3 className="text-xl font-black tracking-tight">Strapi CMS Panel</h3>
+                                        <p className="text-white/40 text-sm font-medium leading-relaxed">Manage hero texts, images, card orders, card visibility, bookings, and payments.</p>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-accent relative z-10 group-hover:gap-4 transition-all mt-auto">
+                                        Launch Control Panel <ChevronRight className="w-4 h-4" />
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white relative z-10 group-hover:gap-4 transition-all">
-                                    Access Module <ChevronRight className="w-4 h-4" />
-                                </div>
-                            </div>
-                        </Link>
+                            </a>
+                        </div>
                     </AnimatedSection>
 
                 </ClientContentWrapper>

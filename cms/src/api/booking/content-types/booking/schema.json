@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bookings",
+  "info": {
+    "singularName": "booking",
+    "pluralName": "bookings",
+    "displayName": "Booking",
+    "description": "Customer booking records"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "booking_reference": {
+      "type": "string",
+      "required": true
+    },
+    "guest_name": {
+      "type": "string",
+      "required": true
+    },
+    "guest_email": {
+      "type": "email",
+      "required": true
+    },
+    "check_in_date": {
+      "type": "date"
+    },
+    "check_out_date": {
+      "type": "date"
+    },
+    "guests_count": {
+      "type": "integer"
+    },
+    "total_amount": {
+      "type": "decimal"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "confirmed",
+        "cancelled",
+        "completed",
+        "no_show"
+      ],
+      "default": "pending"
+    },
+    "hotel_name": {
+      "type": "string"
+    },
+    "stripe_payment_intent_id": {
+      "type": "string"
+    }
+  }
+}

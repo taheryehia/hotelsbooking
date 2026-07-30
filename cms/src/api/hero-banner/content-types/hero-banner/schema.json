@@ -1,0 +1,31 @@
+{
+  "kind": "singleType",
+  "collectionName": "hero_banners",
+  "info": {
+    "singularName": "hero-banner",
+    "pluralName": "hero-banners",
+    "displayName": "Hero Banner",
+    "description": "Homepage hero header text and image"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "badge_text": {
+      "type": "string",
+      "default": "Book Now, Pay Later"
+    },
+    "title": {
+      "type": "string",
+      "default": "Find Your Perfect Escape"
+    },
+    "subtitle": {
+      "type": "text",
+      "default": "Experience boutique luxury with our seamless booking system."
+    },
+    "background_image": {
+      "type": "string",
+      "default": "https://images.unsplash.com/photo-1596436889106-be35e843f974"
+    }
+  }
+}

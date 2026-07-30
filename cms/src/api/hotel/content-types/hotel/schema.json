@@ -1,0 +1,57 @@
+{
+  "kind": "collectionType",
+  "collectionName": "hotels",
+  "info": {
+    "singularName": "hotel",
+    "pluralName": "hotels",
+    "displayName": "Hotel",
+    "description": "Hotel cards and property details"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "star_rating": {
+      "type": "decimal",
+      "default": 5
+    },
+    "base_price": {
+      "type": "decimal",
+      "default": 150
+    },
+    "display_order": {
+      "type": "integer",
+      "default": 0
+    },
+    "is_hidden": {
+      "type": "boolean",
+      "default": false
+    },
+    "main_image": {
+      "type": "string"
+    },
+    "prisma_id": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "hotels-cms",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Strapi CMS control panel for StayEase Hotels",
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi"
+  },
+  "dependencies": {
+    "@strapi/strapi": "^5.0.0",
+    "@strapi/plugin-users-permissions": "^5.0.0",
+    "@strapi/plugin-cloud": "^5.0.0",
+    "pg": "^8.13.1"
+  },
+  "author": {
+    "name": "StayEase Admin"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=22.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}
