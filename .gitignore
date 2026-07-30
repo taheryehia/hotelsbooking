@@ -44,3 +44,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+cms/node_modules/
+cms/build/
+cms/.tmp/
+cms/.cache/
+cms/.env
