@@ -50,3 +50,4 @@ cms/build/
 cms/.tmp/
 cms/.cache/
 cms/.env
+cms/public/uploads/

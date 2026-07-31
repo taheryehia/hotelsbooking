@@ -16,7 +16,7 @@ function getHeaders() {
 export async function getStrapiHotels() {
   try {
     const res = await fetch(`${STRAPI_URL}/api/hotels?sort[0]=display_order:asc&filters[is_hidden][$ne]=true&populate=*`, {
-      next: { revalidate: 10 }
+      next: { tags: ['strapi-hotels', 'strapi'], revalidate: 3600 }
     })
     if (!res.ok) throw new Error("Strapi error")
     const json = await res.json()
@@ -65,7 +65,7 @@ export async function getHeroBanner() {
   }
   try {
     const res = await fetch(`${STRAPI_URL}/api/hero-banner?populate=*`, {
-      next: { revalidate: 10 }
+      next: { tags: ['strapi-hero', 'strapi'], revalidate: 3600 }
     })
     if (!res.ok) return fallback
     const json = await res.json()

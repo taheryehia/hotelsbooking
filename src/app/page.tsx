@@ -5,7 +5,9 @@ import { getHeroBanner, getStrapiHotels } from "@/lib/strapi"
 import Link from "next/link"
 import Image from "next/image"
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600 // Revalidate every hour as a fallback, or on-demand via Strapi webhook
+
+
 
 type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
