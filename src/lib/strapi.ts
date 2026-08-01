@@ -1,10 +1,11 @@
 import { prisma } from "@/lib/prisma"
 import { unstable_cache } from "next/cache"
 
-const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337"
+const STRAPI_URL = process.env.STRAPI_URL || ""
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN || ""
 // Gate the Strapi HTTP fetch behind an explicit env flag so a slow/unreachable
-// CMS never stalls page rendering when the DB is the intended source.
+// CMS never stalls page rendering when the DB is the intended source. With no
+// STRAPI_URL configured, the HTTP path is skipped entirely (no localhost fallback).
 const STRAPI_FETCH_ENABLED = process.env.STRAPI_FETCH_ENABLED === "true"
 const STRAPI_FETCH_TIMEOUT_MS = Number(process.env.STRAPI_FETCH_TIMEOUT_MS || 1000)
 
@@ -63,8 +64,8 @@ const getCachedHotels = unstable_cache(
 )
 
 export async function getStrapiHotels() {
-  // If STRAPI_URL is pointing to localhost, skip HTTP fetch entirely and query database directly
-  const isLocal = STRAPI_URL.includes("localhost") || STRAPI_URL.includes("127.0.0.1")
+  // If STRAPI_URL is unset or pointing to localhost, skip HTTP fetch entirely and query database directly
+  const isLocal = !STRAPI_URL || STRAPI_URL.includes("localhost") || STRAPI_URL.includes("127.0.0.1")
 
   if (!isLocal && STRAPI_FETCH_ENABLED) {
     try {
@@ -156,7 +157,7 @@ const getCachedHeroBanner = unstable_cache(
 )
 
 export async function getHeroBanner() {
-  const isLocal = STRAPI_URL.includes("localhost") || STRAPI_URL.includes("127.0.0.1")
+  const isLocal = !STRAPI_URL || STRAPI_URL.includes("localhost") || STRAPI_URL.includes("127.0.0.1")
 
   if (!isLocal && STRAPI_FETCH_ENABLED) {
     try {
@@ -190,6 +191,9 @@ export async function getHeroBanner() {
 }
 
 export async function syncBookingToStrapi(booking: any) {
+  if (!STRAPI_URL || STRAPI_URL.includes("localhost") || STRAPI_URL.includes("127.0.0.1")) {
+    return
+  }
   try {
     await fetch(`${STRAPI_URL}/api/bookings`, {
       method: "POST",
@@ -216,6 +220,9 @@ export async function syncBookingToStrapi(booking: any) {
 }
 
 export async function syncPaymentToStrapi(payment: any) {
+  if (!STRAPI_URL || STRAPI_URL.includes("localhost") || STRAPI_URL.includes("127.0.0.1")) {
+    return
+  }
   try {
     await fetch(`${STRAPI_URL}/api/payments`, {
       method: "POST",

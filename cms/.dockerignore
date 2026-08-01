@@ -1,0 +1,11 @@
+node_modules/
+.tmp/
+.cache/
+build/
+.strapi/
+.env
+.git/
+.gitignore
+Dockerfile
+.dockerignore
+.npmrc
