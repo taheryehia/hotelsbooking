@@ -145,10 +145,16 @@ export async function createBooking(data: z.infer<typeof bookingSchema>) {
         include: { hotel: true, payment: true }
     })
 
+    // Fire-and-forget CMS sync: never block the checkout redirect on Strapi.
     if (fullBooking) {
-        const { syncBookingToStrapi, syncPaymentToStrapi } = await import("@/lib/strapi")
-        await syncBookingToStrapi(fullBooking)
-        await syncPaymentToStrapi(updatedPayment)
+        void import("@/lib/strapi")
+            .then(({ syncBookingToStrapi, syncPaymentToStrapi }) =>
+                Promise.allSettled([
+                    syncBookingToStrapi(fullBooking),
+                    syncPaymentToStrapi(updatedPayment)
+                ])
+            )
+            .catch((error) => console.error("Strapi sync failed:", error))
     }
 
     return { success: true, bookingId: result.id, clientSecret: paymentIntent.clientSecret }

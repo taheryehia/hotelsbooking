@@ -95,6 +95,7 @@ export default async function RoomPage({
 
     return (
         <div className="flex min-h-screen flex-col bg-neutral-950 text-white">
+            <link rel="preload" href="https://js.stripe.com/v3/" as="script" />
             <Header />
             <main className="flex-1 container mx-auto px-4 pt-24 md:pt-32 pb-24">
                 <ClientContentWrapper className="max-w-6xl mx-auto space-y-8 md:space-y-12">

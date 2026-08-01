@@ -59,6 +59,9 @@ export function ReserveButton({
             })
 
             if (result && result.success && result.bookingId) {
+                if (result.clientSecret) {
+                    sessionStorage.setItem(`cs_${result.bookingId}`, result.clientSecret)
+                }
                 router.push(`/checkout/${result.bookingId}`)
             } else {
                 throw new Error("Booking creation failed")

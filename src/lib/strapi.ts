@@ -194,6 +194,7 @@ export async function syncBookingToStrapi(booking: any) {
     await fetch(`${STRAPI_URL}/api/bookings`, {
       method: "POST",
       headers: getHeaders(),
+      signal: AbortSignal.timeout(STRAPI_FETCH_TIMEOUT_MS),
       body: JSON.stringify({
         data: {
           booking_reference: booking.booking_reference,
@@ -219,6 +220,7 @@ export async function syncPaymentToStrapi(payment: any) {
     await fetch(`${STRAPI_URL}/api/payments`, {
       method: "POST",
       headers: getHeaders(),
+      signal: AbortSignal.timeout(STRAPI_FETCH_TIMEOUT_MS),
       body: JSON.stringify({
         data: {
           stripe_payment_intent_id: payment.stripe_payment_intent_id,

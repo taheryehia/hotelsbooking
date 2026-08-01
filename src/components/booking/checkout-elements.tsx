@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Elements, PaymentElement, ExpressCheckoutElement, useStripe, useElements } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
-import { Button } from "@/components/ui/button"
+import { getPaymentClientSecret } from "@/actions/payments"
 
 const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "pk_test_mock",
@@ -106,7 +106,48 @@ export function CheckoutForm({ bookingId }: { bookingId: string }) {
     )
 }
 
-export function StripeElementsProvider({ clientSecret, children }: { clientSecret: string, children: React.ReactNode }) {
+export function StripeElementsProvider({ bookingId, children }: { bookingId: string, children: React.ReactNode }) {
+    const [clientSecret, setClientSecret] = useState<string | null>(null)
+    const [error, setError] = useState<string | null>(null)
+
+    useEffect(() => {
+        const stored = sessionStorage.getItem(`cs_${bookingId}`)
+        if (stored) {
+            setClientSecret(stored)
+            return
+        }
+
+        let cancelled = false
+        getPaymentClientSecret(bookingId)
+            .then((secret) => {
+                if (cancelled) return
+                sessionStorage.setItem(`cs_${bookingId}`, secret)
+                setClientSecret(secret)
+            })
+            .catch((e: any) => {
+                if (cancelled) return
+                console.error(e)
+                setError(e?.message || "Failed to initialize payment")
+            })
+        return () => { cancelled = true }
+    }, [bookingId])
+
+    if (error) {
+        return (
+            <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium">
+                {error}
+            </div>
+        )
+    }
+
+    if (!clientSecret) {
+        return (
+            <div className="flex items-center justify-center py-10">
+                <div className="w-8 h-8 border-3 border-white/10 rounded-full animate-spin border-t-white" />
+            </div>
+        )
+    }
+
     return (
         <Elements
             stripe={stripePromise}

@@ -6,7 +6,6 @@ import { Clock, ShieldCheck, Sparkles } from "lucide-react"
 import { ClientContentWrapper, AnimatedSection } from "@/components/layout/client-animation-wrapper"
 import { formatCurrency } from "@/lib/utils"
 import { StripeElementsProvider, CheckoutForm } from "@/components/booking/checkout-elements"
-import { stripe } from "@/lib/stripe"
 
 export const dynamic = 'force-dynamic'
 
@@ -47,20 +46,6 @@ export default async function CheckoutPage({
             </div>
         )
     }
-
-    const intent = await stripe.paymentIntents.retrieve(payment.stripe_payment_intent_id)
-    const clientSecret = intent.client_secret
-
-    if (!clientSecret) {
-        return (
-            <div className="flex min-h-screen items-center justify-center bg-neutral-950 text-white">
-                <p className="text-xl font-black uppercase tracking-widest text-white/20">Failed to initialize payment</p>
-            </div>
-        )
-    }
-
-    const checkIn = new Date(booking.check_in_date).toISOString().split('T')[0]
-    const checkOut = new Date(booking.check_out_date).toISOString().split('T')[0]
 
     return (
         <div className="flex min-h-screen flex-col bg-neutral-950 text-white selection:bg-white selection:text-black">
@@ -110,7 +95,7 @@ export default async function CheckoutPage({
                                             <h2 className="text-2xl font-black tracking-tight">Payment Details</h2>
                                             <p className="text-[10px] text-white/40 font-black uppercase tracking-widest">Complete your booking securely</p>
                                         </div>
-                                        <StripeElementsProvider clientSecret={clientSecret}>
+                                        <StripeElementsProvider bookingId={booking.id}>
                                             <CheckoutForm
                                                 bookingId={booking.id}
                                             />

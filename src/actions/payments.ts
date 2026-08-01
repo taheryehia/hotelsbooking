@@ -2,6 +2,32 @@
 
 import { stripe } from "@/lib/stripe"
 import { prisma } from "@/lib/prisma"
+import { auth } from "@/lib/auth"
+
+// Fallback path used only when the client secret is not already available in
+// the browser (e.g. direct URL hit). The secret is returned ONLY after
+// verifying the booking belongs to the authenticated user.
+export async function getPaymentClientSecret(bookingId: string) {
+    const session = await auth()
+    if (!session?.user?.id) throw new Error("Unauthorized")
+
+    const booking = await prisma.booking.findFirst({
+        where: {
+            id: bookingId,
+            user_id: session.user.id
+        },
+        include: { payment: true }
+    })
+
+    if (!booking?.payment?.stripe_payment_intent_id || booking.payment.stripe_payment_intent_id === "pending") {
+        throw new Error("Payment details unavailable")
+    }
+
+    const intent = await stripe.paymentIntents.retrieve(booking.payment.stripe_payment_intent_id)
+    if (!intent.client_secret) throw new Error("Failed to initialize payment")
+
+    return intent.client_secret
+}
 
 export async function createPaymentIntent(amount: number, currency: string = "usd", metadata: any = {}) {
     const paymentIntent = await stripe.paymentIntents.create({
