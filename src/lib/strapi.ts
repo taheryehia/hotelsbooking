@@ -54,30 +54,37 @@ export async function getStrapiHotels() {
     }
   }
 
-  // Direct database query (instant, no localhost fetch attempts)
+  // Direct database query (instant, no localhost fetch attempts).
+  // Only show published rows, deduped by document_id (newest wins).
   try {
     const cmsHotels: any[] = await prisma.$queryRaw`
-      SELECT * FROM cms_hotels WHERE is_hidden IS NOT TRUE ORDER BY display_order ASC
+      SELECT DISTINCT ON (document_id) *
+      FROM cms_hotels
+      WHERE is_hidden IS NOT TRUE
+        AND published_at IS NOT NULL
+      ORDER BY document_id, id DESC
     `
     if (cmsHotels && cmsHotels.length > 0) {
-      return cmsHotels.map((item: any) => ({
-        id: item.prisma_id || item.id?.toString(),
-        strapi_id: item.id,
-        name: item.name,
-        slug: item.slug || item.name?.toLowerCase().replace(/\s+/g, '-'),
-        description: item.description,
-        address: item.address || "",
-        city: item.city || "",
-        country: item.country || "",
-        star_rating: item.star_rating || 5,
-        amenities: item.amenities || [],
-        images: item.images || [],
-        main_image: item.main_image || "https://images.unsplash.com/photo-1566073771259-6a8506099945",
-        display_order: item.display_order ?? 0,
-        is_hidden: item.is_hidden ?? false,
-        rooms: item.base_price ? [{ base_price: Number(item.base_price) }] : [],
-        _count: { favorites: 0 }
-      }))
+      return cmsHotels
+        .map((item: any) => ({
+          id: item.prisma_id || item.id?.toString(),
+          strapi_id: item.id,
+          name: item.name,
+          slug: item.slug || item.name?.toLowerCase().replace(/\s+/g, '-'),
+          description: item.description,
+          address: item.address || "",
+          city: item.city || "",
+          country: item.country || "",
+          star_rating: item.star_rating || 5,
+          amenities: item.amenities || [],
+          images: item.images || [],
+          main_image: item.main_image || "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+          display_order: item.display_order ?? 0,
+          is_hidden: item.is_hidden ?? false,
+          rooms: item.base_price ? [{ base_price: Number(item.base_price) }] : [],
+          _count: { favorites: 0 }
+        }))
+        .sort((a: any, b: any) => (a.display_order ?? 0) - (b.display_order ?? 0))
     }
   } catch (cmsDbErr) {
     // Fallback to prisma.hotel
@@ -126,11 +133,13 @@ export async function getHeroBanner() {
     }
   }
 
-  // Direct database query (instant, no localhost fetch attempts)
+  // Direct database query (instant, no localhost fetch attempts).
+  // Only show the published hero banner row, newest wins.
   try {
     const rawResult: any[] = await prisma.$queryRaw`
       SELECT title, subtitle, badge_text, background_image 
       FROM cms_hero_banners 
+      WHERE published_at IS NOT NULL
       ORDER BY id DESC LIMIT 1
     `
     if (rawResult && rawResult.length > 0) {
