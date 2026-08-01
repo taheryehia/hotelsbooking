@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { Header } from "@/components/layout/header"
 import { SearchFilters } from "@/components/search/search-filters"
 import { HotelCard } from "@/components/hotels/hotel-card"
@@ -13,14 +14,28 @@ type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
+function HeaderFallback() {
+  return (
+    <header className="fixed top-0 inset-x-0 z-50 py-4 px-4 sm:px-6 pointer-events-none">
+      <div className="w-full max-w-5xl mx-auto pointer-events-auto">
+        <div className="flex h-14 items-center justify-center px-6 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg">
+          <span className="text-xl font-bold text-foreground">
+            Stay<span className="text-primary">Ease</span>
+          </span>
+        </div>
+      </div>
+    </header>
+  )
+}
+
 export default async function Home({ searchParams }: PageProps) {
   const params = await searchParams
   const query = typeof params.q === 'string' ? params.q.trim() : undefined
   const checkIn = typeof params.checkIn === 'string' ? new Date(params.checkIn) : undefined
   const checkOut = typeof params.checkOut === 'string' ? new Date(params.checkOut) : undefined
 
-  const hero = await getHeroBanner()
-  let hotels = await getStrapiHotels()
+  const [hero, fetchedHotels] = await Promise.all([getHeroBanner(), getStrapiHotels()])
+  let hotels = fetchedHotels
   const isSearch = !!query || (!!checkIn && !!checkOut)
 
   if (query) {
@@ -37,7 +52,9 @@ export default async function Home({ searchParams }: PageProps) {
 
   return (
     <div className="flex min-h-screen flex-col bg-background-alt">
-      <Header />
+      <Suspense fallback={<HeaderFallback />}>
+        <Header />
+      </Suspense>
       <main className="flex-1 w-full">
         <section className="relative h-screen min-h-[700px] w-full flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">

@@ -1,19 +1,25 @@
 "use client"
 
 import * as React from "react"
+import dynamic from "next/dynamic"
 import { useRouter, useSearchParams } from "next/navigation"
 import { format, addDays } from "date-fns"
 import { Calendar as CalendarIcon, Search, Users, MapPin, Minus, Plus } from "lucide-react"
-import { DateRange } from "react-day-picker"
+import type { DateRange } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
+
+// Code-split the date picker so react-day-picker only loads when the popover is opened
+const Calendar = dynamic(
+    () => import("@/components/ui/calendar").then((m) => m.Calendar),
+    { ssr: false }
+)
 
 export function SearchFilters() {
     const router = useRouter()
